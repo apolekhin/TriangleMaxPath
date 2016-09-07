@@ -11,38 +11,21 @@ namespace Triangle
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter a path to txt file:");
-            string path = Console.ReadLine();
-            
-            Console.WriteLine("Reading from: " + path);
+            string path = GetPath();
             try
             {
-                if (new System.IO.FileInfo(path).Length != 0)
-                {
-                    List<List<int>> arr = TxtToList(path);
-                    Triangle.CalculatePath(arr);
-                }
-                else
-                {
-                    Console.WriteLine("File is empty");
-                    Console.ReadLine();
-                }
-            }
-            catch (System.IO.FileNotFoundException ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.ReadLine();
+                List<List<int>> arr = TxtToList(path);
+                Triangle.CalculatePath(arr);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Console.ReadLine();
             }
+            Console.ReadKey();
         }
 
         public class Triangle
         {
-            
             public static void CalculatePath(List<List<int>> arr)
             {
                 /*Goes up from penultimate line, 
@@ -68,7 +51,6 @@ namespace Triangle
                 {
                     Console.WriteLine("The triangle is not suitable for this test");
                 }
-                Console.ReadLine();
             }
 
             public static bool IsIsosceles(List<List<int>> arr)
@@ -88,23 +70,40 @@ namespace Triangle
                 }
                 return flag;
             }
+        }
 
+        public static string GetPath()
+        {
+            string path;
+            
+            do
+            {
+                Console.WriteLine("Enter a path to txt file:");
+                path = Console.ReadLine();
+            }
+
+            while (!System.IO.File.Exists(path));
+
+            return path;
         }
 
         public static List<List<int>> TxtToList( string path )
         {
             /*Reads txt file and populates list from it*/
+            Console.WriteLine("Reading from: " + path);
             string[] input = System.IO.File.ReadAllLines(path);
             List<List<int>> triangle = new List<List<int>>();
-
-            foreach (string line in input)
-            {
-                string[] values = line.Split(' ');
-                int[] convertedItems = Array.ConvertAll<string, int>(values, int.Parse);
-                triangle.Add(new List<int>(convertedItems));
-            };
+            
+                foreach (string line in input)
+                {
+                    string[] values = line.Split(' ');
+                    int[] convertedItems = Array.ConvertAll<string, int>(values, int.Parse);
+                    triangle.Add(new List<int>(convertedItems));
+                };
+            
+             
             return triangle;
         }
-
+       }
     }
-}
+
